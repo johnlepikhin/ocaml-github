@@ -736,6 +736,14 @@ module type Github = sig
       user:string -> repo:string -> sha:string ->
       unit -> Github_t.commit Response.t Monad.t
     (** [get_commit ~user ~repo ~sha ()] is commit [sha] in [user]/[repo]. *)
+
+    val create :
+      ?token:Token.t ->
+      ?description:string ->
+      user:string -> name:string ->
+      unit -> Github_t.repository Response.t Monad.t
+    (** [create ?token ?description ~user ~name ()] creates repository with name [name] and optional description [description] in account [user]. *)
+
   end
 
   (** The [Hook] module provides access to GitHub's

@@ -203,6 +203,9 @@ module Make(Time : Github_s.Time)(CL : Cohttp_lwt.Client) = struct
     let repo_search =
       Uri.of_string (Printf.sprintf "%s/search/repositories" api)
 
+    let repo_create =
+      Uri.of_string (Printf.sprintf "%s/user/repos" api)
+
     let hook ~user ~repo ~id =
       Uri.of_string (Printf.sprintf "%s/repos/%s/%s/hooks/%Ld" api user repo id)
 
@@ -1475,6 +1478,13 @@ module Make(Time : Github_s.Time)(CL : Cohttp_lwt.Client) = struct
     let tags ?token ~user ~repo () =
       let uri = URI.repo_tags ~user ~repo in
       API.get_stream ?token ~uri (fun b -> return (repo_tags_of_string b))
+
+    let create ?token ?description ~user ~name () =
+      let uri = URI.repo_create in
+      let body = string_of_new_repo { new_repo_name = name; new_repo_description = description } in
+      API.post ~body ?token ~uri ~expected_code:`Created (fun b ->
+        return (repository_of_string b)
+      ) 
   end
 
   module Event = struct

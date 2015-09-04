@@ -372,6 +372,11 @@ type repository_search = {
   items: repositories;
 } <ocaml field_prefix="repository_search_">
 
+type new_repo = {
+  name: string;
+  ?description: string option;
+} <ocaml field_prefix="new_repo_">
+
 type branch = {
   label: string;
   ref: string;
